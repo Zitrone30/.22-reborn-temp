@@ -59,17 +59,22 @@ npm install
 ```bash
 export MC_PASSWORD="your_password"
 export STORAGE_REPO_TOKEN="your_PAT_token"
+export MAIN_REPO_PAT="your_PAT_token"
 ```
 More about P.A.T (Personal Access Token) on github read [here.](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 You also need to initiate your own project path for archiving data, or just code your own
 
-2. Start the bot:
+For STORAGE_REPO_TOKEN pick REPO only, for MAIN_REPO_PAT pick REPO and WORKFLOW
+
+2. Create an private repo for your storage system.
+   
+3. Start the bot:
 
 ```bash
 node index.js
 ```
 
-3. The bot connects by default to `eu.6b6t.org` (changeable in `index.js`).
+4. The bot connects by default to `eu.6b6t.org` (changeable in `index.js`).
 
 ---
 
