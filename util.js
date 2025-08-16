@@ -3,22 +3,43 @@ const fs = require('fs');
 const path = require('path');
 
 let startTime = Date.now();
+let currentWorldAge = 0
 
 const spam_count = {};
 const temp_blacklist = new Map();
 const spam_offenses = {};
+const tpsBuffer = []
+
+const MAX_BUFFER = 20;
 const whitelist = ['Damix2131', 'q33a', 'ryk_cbaool',
     'Abottomlesspit', 'MioAutoCrystal', 'NIKASTEIN', "xiNxghtMar3ix"];
 
-async function updateUserLifetimeStats(username, state) {
-  try {
-    const stats = await fetchLifetimeStats(username);
-    state.totalStats[username] = stats;
-    return stats;
-  } catch (err) {
-    console.error(`[Utils] Failed to fetch lifetime stats for ${username}:`, err);
-    return null;
+function getCurrentTPS() {
+    if (tpsBuffer.length === 0) return 20;
+
+    const sum = tpsBuffer.reduce((a, b) => a + b, 0);
+    return sum / tpsBuffer.length;
+}
+
+function getCurrentTPSInstant() {
+    return tpsBuffer.length ? tpsBuffer[tpsBuffer.length - 1] : 20;
+}
+
+function getServerTPS(currentWorldAge, lastWorldAge, timeElapsedMs, clientRestarted) {
+  let tpsPassed = (currentWorldAge - lastWorldAge)
+  let secondsPassed = timeElapsedMs / 1000
+
+  let tps = tpsPassed / secondsPassed
+
+  if (tps < 0) {tps = 0}
+  if (tps > 20) {tps = 20}
+
+  if (clientRestarted) {
+    tpsBuffer.length = 0
+    clientRestarted = false
   }
+  tpsBuffer.push(tps)
+  if (tpsBuffer.length > MAX_BUFFER) tpsBuffer.shift();
 }
 
 function loadBotData(state) {
@@ -291,10 +312,12 @@ module.exports = {
   saveBotData,
   startAutoSave,
   loadBotData,
+  getCurrentTPS,
+  getCurrentTPSInstant,
+  getServerTPS,  
   updateUserLifetimeStats,
   spam_count,
   temp_blacklist,
   spam_offenses,
   whitelist,
-
 };
