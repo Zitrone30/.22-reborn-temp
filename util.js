@@ -315,9 +315,9 @@ module.exports = {
   getCurrentTPS,
   getCurrentTPSInstant,
   getServerTPS,  
-  updateUserLifetimeStats,
   spam_count,
   temp_blacklist,
   spam_offenses,
   whitelist,
 };
+
