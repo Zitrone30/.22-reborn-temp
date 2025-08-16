@@ -387,8 +387,10 @@ const public_commands = {
     },
 
     [`${prefix}tps`]: (user, message, bot, state) => {
-        const tps = bot.getTps()
-        bot.chat(state.safeChat(`Server TPS: ${tps}`));
+        const serverTPS = state.getCurrentTPS().toFixed(2); // from update_time packets
+        const clientTPS = bot.getTps().toFixed(2); // from mineflayer-tps plugin
+
+        bot.chat(state.safeChat(`Client TPS: ${clientTPS} | Server TPS: ${serverTPS}`));
     },
 
     [`${prefix}kd`]: (user, message, bot, state) => {
