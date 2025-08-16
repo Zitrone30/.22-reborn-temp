@@ -1,5 +1,5 @@
 // index.js
-require('dotenv').config();
+// require('dotenv').config()
 
 const mineflayer = require('mineflayer');
 const tpsPlugin = require('mineflayer-tps')(mineflayer);
@@ -268,4 +268,5 @@ function startup() {
 }
 
 startup();
+
 
