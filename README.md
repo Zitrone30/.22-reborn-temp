@@ -150,6 +150,6 @@ MIT License — see [LICENSE](LICENSE) file.
 
 ### Star & Support
 
-[![GitHub stars](https://img.shields.io/github/stars/Damix-hash/.22?style=social)](https://github.com/Damix-hash/.22/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Damix-hash/.22?style=social)](https://github.com/Damix-hash/.22/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/Damix-hash/.22)](https://github.com/Damix-hash/.22/issues)
+[![GitHub stars](https://img.shields.io/github/stars/Damix-hash/.22-reborn?style=social)](https://github.com/Damix-hash/.22-reborn/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Damix-hash/.22-reborn?style=social)](https://github.com/Damix-hash/.22-reborn/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/Damix-hash/.22-reborn)](https://github.com/Damix-hash/.22-reborn/issues)
