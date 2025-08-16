@@ -1,7 +1,7 @@
 
 ---
 
-# .22 — Anarchy Utility Bot for Minecraft
+# .22 Reborn — Anarchy Utility Bot for Minecraft
 
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js)](https://nodejs.org/)
 [![Mineflayer](https://img.shields.io/badge/Mineflayer-Library-blue?logo=minecraft)](https://github.com/PrismarineJS/mineflayer)
