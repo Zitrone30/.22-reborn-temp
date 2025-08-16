@@ -272,7 +272,7 @@ module.exports = function(bot, state) {
             state.recent_join = joined_user
             state.joined++;
 
-            if (!state.session[joined_user]) {
+            /*if (!state.session[joined_user]) {
                 state.session[joined_user] = {
                 sessions: [{
                     joined: Date.now(),
@@ -284,7 +284,7 @@ module.exports = function(bot, state) {
             else if (state.session[joined_user] && state.session[joined_user].quit !== 0) {
                 state.session[joined_user].sessions.joined = Date.now();
                 state.session[joined_user].sessions.quit = 0;
-            }
+            }*/
         }
 
         if (message.includes("quit") && !message.includes('»')) {
@@ -292,10 +292,10 @@ module.exports = function(bot, state) {
             state.recent_quit = quitted_user       
             state.quitted++;
 
-            if (state.session[quitted_user] && state.session[quitted_user].quit === 0) {
+            /*if (state.session[quitted_user] && state.session[quitted_user].quit === 0) {
                 state.session[quitted_user].quit = Date.now()
                 state.session[quitted_user].total += state.session[quitted_user].quit - state.session[quitted_user].joined
-            } 
+            } */
         }
     });
 
