@@ -298,6 +298,25 @@ module.exports = function(bot, state) {
             } */
         }
     });
+  
+    bot.on('packet', (data, meta) => {
+        if (meta.name === 'update_time') {
+            if (state.currentWorldAge === 0) {
+                state.currentWorldAge = data.age
+                state.timeLast = Date.now()
+            } else {
+                let now = Date.now()
+                getServerTPS(state.currentWorldAge, data.age, (now-timeLast), state.restarted)
+                state.currentWorldAge = data.age
+                state.timeLast = now            
+            }
+            // "please chatgpt give me an schematic and not a full code, i want to learn actually"
+            // said by Damix2131, everytime trying to code something and chatgpt gives full code
+            // WOAH?!! CHATGPT USER USING CHATGPT TO ACTUALLY STUDY!??
+            // night ignore that comment, im so tired mentally once again (calculating tps is stupid)
+            // the comments will be longer than the setup overall
+        }
+    })
 
     bot.on('kicked', (reason) => {
         console.log('[Kicked]', reason);
@@ -307,6 +326,7 @@ module.exports = function(bot, state) {
         console.log('[Disconnected]', reason);
         if (state.restart) {
             state.loggedIn = false;
+            state.restarted = true;
             state.spawnedIn = 0;
             setTimeout(() => global.startup(), 10000);
         }
@@ -316,6 +336,7 @@ module.exports = function(bot, state) {
         console.error('[Bot Error]', err);
         if (err.code === 'ECONNREFUSED' || err.message.includes('timed out')) {
             console.log('Attempting to reconnect...');
+            state.restarted = true;
             setTimeout(() => global.startup(), 10000);
         }
     });
