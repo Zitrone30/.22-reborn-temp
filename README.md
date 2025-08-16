@@ -128,7 +128,7 @@ Prefix: `-`
 | `welcomer` | Toggle join/quit greetings           |
 | `tempwl`   | Temporarily whitelist a player       |
 | `remwl`    | Remove a player from temp whitelist  |
-| `timeout`  | Mute the bot (removes keep\_alive)   |
+| `timeout`  | DEBUGGING, Removes keep_alive packet, restarting the bot   |
 
 ---
 
