@@ -1,5 +1,7 @@
 // index.js
-// require('dotenv').config()
+require('dotenv').config();
+
+
 
 const mineflayer = require('mineflayer');
 const tpsPlugin = require('mineflayer-tps')(mineflayer);
@@ -44,6 +46,8 @@ function startup() {
         sessions: {},
         joined: 0,
         quitted: 0,
+        timeLast: 0,
+        currentWorldAge: 0, 
         recent_join: '',
         recent_quit: '',
         newest_player: false,
@@ -63,6 +67,7 @@ function startup() {
         spam_count: utils.spam_count,
         spam_offenses: utils.spam_offenses,
         restart: true,
+        restarted: false,
         whitelist: utils.whitelist,
         whitelisted_users: utils.whitelisted_users,
         get_uptime: utils.get_uptime,
@@ -77,6 +82,9 @@ function startup() {
         handleTargetCommand: utils.handleTargetCommand,
         saveBotData: utils.saveBotData,
         startAutoSave: utils.startAutoSave,
+        getCurrentTPS: utils.getCurrentTPS,
+        getCurrentTPSInstant: utils.getCurrentTPSInstant,
+        getServerTPS: utils.getServerTPS,        
         roasts: [
             "Your birth certificate is a griefing report.", "You're why the `/kill` command exists.",
             "Even Void wouldn't want to touch you.", "You look like a lag spike made human.",
@@ -268,5 +276,3 @@ function startup() {
 }
 
 startup();
-
-
