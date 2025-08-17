@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 
 let startTime = Date.now();
-let currentWorldAge = 0
 
 const spam_count = {};
 const temp_blacklist = new Map();
@@ -12,7 +11,14 @@ const tpsBuffer = []
 
 const MAX_BUFFER = 20;
 const whitelist = ['Damix2131', 'q33a', 'ryk_cbaool',
-    'Abottomlesspit', 'MioAutoCrystal', 'NIKASTEIN', "xiNxghtMar3ix"];
+    'Abottomlesspit', 'MioAutoCrystal', 'NIKASTEIN', "xiNxghtMar3ix", "Lua"];
+
+async function fetchJD(user, state) {
+    const response = await fetch(`https://www.6b6t.org/pl/stats/${user}`);
+    const text = await response.text()
+    if (!text.includes("since")) return null;
+    return String(text.split("since")[1].split("</span></div></div></div>")[0].replace("<!-- -->", "").trim());
+}
 
 function getCurrentTPS() {
     if (tpsBuffer.length === 0) return 20;
@@ -56,9 +62,9 @@ function loadBotData(state) {
       state.global_deaths = data.deaths || 0;
       state.topKills = data.topKills || {};
       state.marriages = data.marriages || {};
-      state.bot_uses = data.bot_uses || {};
+      state.bot_uses = data.bot_uses || 0;
       state.totalStats = data.totalStats || {};
-      state.sessions = data.sessions || {}
+      state.joindates = data.joindates || {}
 
       console.log('[Bot] Loaded bot_data.json');
     } else {
@@ -81,7 +87,7 @@ function saveBotData(state) {
       topKills: state.crystal_kills || {},
       marriages: state.marriages || {},
       bot_uses: state.bot_uses || 0,
-      sessions: state.sessions || {},
+      joindates: state.joindates || {},
       lastUpdate: new Date().toISOString()
       
     };
@@ -131,17 +137,19 @@ function random_element(arr) {
   return String(arr[Math.floor(Math.random() * arr.length)]);
 }
 
-function createRandomString(length) {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
+function createRandomString() {
+    const length = 5;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
 }
 
 function safeChat(msg) {
-  return `${msg} ${createRandomString((Math.floor(Math.random() * 5))+5)}`
+    return `${msg} ${createRandomString()}`;
 }
 
 function get_random_ip() {
@@ -158,15 +166,6 @@ function getIndefiniteArticle(word) {
   return /^[aeiou]/i.test(word) ? 'an' : 'a';
 }
 
-/**
- * General handler for "percent" style commands
- * Example output: "player is 73% gay"
- * options:
- * - status: fixed string status to output instead of percent
- * - customMessage: a function (user, cmd) => string for full custom message
- * - isRating: if true, percent is 1-10 instead of 0-100
- * - useArticle: add indefinite article ("a" or "an") before command name
- */
 function handlePercentCmd(user, prefix, message, bot, state, options = {}) {
   const [fullCmd, ...rest] = message.trim().split(/\s+/);
   const cmd = fullCmd.replace(prefix, '').toLowerCase();
@@ -314,10 +313,10 @@ module.exports = {
   loadBotData,
   getCurrentTPS,
   getCurrentTPSInstant,
-  getServerTPS,  
+  getServerTPS,
+  fetchJD,
   spam_count,
   temp_blacklist,
   spam_offenses,
   whitelist,
 };
-
