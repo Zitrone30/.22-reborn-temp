@@ -771,7 +771,7 @@ const admin_commands = {
         const message_to_run = message.split(`${prefix}run `)[1];
         if (message_to_run && message_to_run.trim() !== '') {
             const blacklist = ["/ignore", "/delhome", "/freecam", "/balloons", "/tpy", "/kill", "/suicide",
-                "/togglewhispering", "/togglechat", "/hotspot"
+                "/togglewhispering", "/togglechat", "/hotspot", "/hotspot create"
             ];
             if (!blacklist.some(cmd => message_to_run.includes(cmd))) {
                 bot.chat(message_to_run);
@@ -782,10 +782,14 @@ const admin_commands = {
             bot.chat(`/w ${user} Usage -run <command?>`)
         }
     },
-
+    
     [`${prefix}say`]: (user, message, bot, state) => {
         const message_to_run = message.split(`${prefix}say `)[1];
-        bot.chat(state.safeChat(` ${message_to_run}`)) // space at start doesn't let any commands to run
+        if (message_to_run && message_to_run.trim() !== '') {
+            bot.chat(state.safeChat(` ${message_to_run}`)) // space at start doesn't let any commands to run
+        } else {
+            bot.chat(`/w ${user} Usage -say <message>`)
+        }
     },
 
     [`${prefix}welcomer`]: (user, message, bot, state) => {
@@ -822,4 +826,5 @@ const admin_commands = {
 }
 
 module.exports = { public_commands, admin_commands };
+
 
