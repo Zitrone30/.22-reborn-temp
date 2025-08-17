@@ -91,7 +91,7 @@ module.exports = function(bot, state) {
         }
 
         if (state.spawnedIn >= 2 && !blacklisted_messages.some(blk => message.includes(blk)) && message.trim() !== '') {
-            console.log(message);
+            console.log(message);      
         }
 
         if (message.includes('»')) {
@@ -153,24 +153,30 @@ module.exports = function(bot, state) {
             }
 
             if (command.startsWith(state.prefix)) {
-                let cmd = command.split(" ")[0]
+                const cmd = command.split(" ")[0].toLowerCase();
 
-                if (state.temp_blacklist.has(username)) return;
-                if (checkSpam(bot, username)) return;
-                if (message.includes(".org") || message.includes(".uk") || message.includes(".com") || message.includes(".gg")) return;
-                
+                if (message.includes(".org") || message.includes(".uk") || message.includes(".com") || message.includes(".gg") || message.includes(".me")) return;
+
                 if (whitelisted_users(username)) {
-                    if (admin_commands.hasOwnProperty(cmd)) {
-                        admin_commands[cmd](username, command, bot, state);
+                    for (const key in admin_commands) {
+                        if (cmd.trim() === key.toLowerCase()) {
+                            admin_commands[key](username, command, bot, state);
+                            break;
+                        }
                     }
                 }
 
-                if (public_commands.hasOwnProperty(cmd)) {
-                    public_commands[cmd](username, command, bot, state)
-                    state.bot_uses++
+                for (const key in public_commands) {
+                    if (cmd.trim() === key.toLowerCase()) {
+                        public_commands[key](username, command, bot, state);
+                        break;
+                    }
                 }
+
+                state.bot_uses++;
             }
         }
+
 
         if (message.includes('dsc.gg') || message.includes('discord.gg')) {
             state.ads_seen++;
