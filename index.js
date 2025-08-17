@@ -1,8 +1,6 @@
 // index.js
 require('dotenv').config();
 
-
-
 const mineflayer = require('mineflayer');
 const tpsPlugin = require('mineflayer-tps')(mineflayer);
 
@@ -58,6 +56,7 @@ function startup() {
         bot_uses: 0,
         bot_tips_sent: 0,
         ads_seen: 0,
+        cooldowns: [],
         dupe_mentioned: 0,
         vined_on_top_deaths: 0,
         i_am_vined_deaths: 0,
@@ -69,6 +68,7 @@ function startup() {
         restart: true,
         restarted: false,
         whitelist: utils.whitelist,
+        joindates: {},
         whitelisted_users: utils.whitelisted_users,
         get_uptime: utils.get_uptime,
         random_element: utils.random_element,
@@ -84,7 +84,8 @@ function startup() {
         startAutoSave: utils.startAutoSave,
         getCurrentTPS: utils.getCurrentTPS,
         getCurrentTPSInstant: utils.getCurrentTPSInstant,
-        getServerTPS: utils.getServerTPS,        
+        getServerTPS: utils.getServerTPS,  
+        fetchJD: utils.fetchJD,      
         roasts: [
             "Your birth certificate is a griefing report.", "You're why the `/kill` command exists.",
             "Even Void wouldn't want to touch you.", "You look like a lag spike made human.",
@@ -173,6 +174,9 @@ function startup() {
             "Track who joined recently with -playerjoins!",
             "Want to know who ragequit last? Try -playerquits!",
             "Wondering if the server's dying? Check the TPS with -tps!",
+            "The Bot has been made by Damix2131, Try it out by running -help!",
+            "Still got <Malachite> Virus?, We are still secure of it, run -help to see it yourself!",
+            "Forgot when you joined? Give -jd <username> a try!",
             "Need average ping stats? Use -avgping!",
             "Stay informed with server restart time: -restart",
             "Check who's been fragged the most using -topkills!",
@@ -276,3 +280,4 @@ function startup() {
 }
 
 startup();
+
