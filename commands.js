@@ -1,3 +1,5 @@
+const { safeChat } = require("./util");
+
 // commands.js
 const prefix = "-";
 
@@ -99,12 +101,12 @@ const public_commands = {
     //     bot.chat(state.safeChat(`Please pick an Kit you want to use with ${prefix}kit help`)
     //   }
     // },
-
+    
     [`${prefix}lesbian`]: (user, message, bot, state) => {
         bot.chat(state.handlePercentCmd(user, prefix, message, bot, state))
     },
 
-    [`${prefix}turk`]: (user, message, bot, state) => {
+    [`${prefix}turkish`]: (user, message, bot, state) => {
         bot.chat(state.handlePercentCmd(user, prefix, message, bot, state))
     },
 
@@ -126,6 +128,21 @@ const public_commands = {
         } else {
             bot.chat(state.safeChat(`${user} is ${status}`));
         }
+    },
+
+    [`${prefix}edge`]: (user, message, bot, state) => {
+        let args = message.split(`${prefix}edge `)[1];
+        const response = Math.floor(Math.random() * 356)
+        if (args === 'random') { 
+            const players = Object.keys(bot.players)
+            args = state.random_element(players);
+        }
+
+        if (args && args.trim().length > 0) {
+            bot.chat(state.safeChat(`${args} has an edging streak of ${response} days`));
+        } else {
+            bot.chat(state.safeChat(`${user} has an edging streak of ${response} days`));
+        }        
     },
 
     [`${prefix}love`]: (user, message, bot, state) => {
@@ -457,6 +474,22 @@ const public_commands = {
         bot.chat(state.safeChat(`Bot uses: ${state.bot_uses}, Bot tips sent: ${state.bot_tips_sent}, Ads seen: ${state.ads_seen}, word "dupe" mentioned: ${state.dupe_mentioned}, public command: ${Object.keys(public_commands).length}`))
     },
 
+    [`${prefix}jd`]: async (user, message, bot, state) => {
+        let args = message.split(`${prefix}jd `)[1];
+
+        if (!args || args.trim() === '') args = user;
+        if (!state.joindates[args]) {
+            state.joindates[args] = await state.fetchJD(args.trim()); // clearly that worked
+        }
+
+        if (state.joindates[args] !== null) {
+            bot.chat(state.safeChat(`${args} joined on: ${state.joindates[args]}`))
+        } else {
+            bot.chat(state.safeChat(`User ${args} doesn't exist or never joined.`))
+            delete state.joindates[args];
+        }
+    },
+
     [`${prefix}weather`]: (user, message, bot, state) => {
         let rainState = bot.rainState > 0 ? 'Raining' : 'Clear skies';
         let thunderState = bot.thunderState > 0 ? 'Thunderstorm' : 'No thunder';
@@ -527,9 +560,9 @@ const public_commands = {
                 const players = Object.keys(bot.players);
                 args = state.random_element(players);
             }            
-            bot.chat(state.safeChat(`${args}'s ping is: ${bot.players[args]?.ping}`));
+            bot.chat(state.safeChat(`${args}'s ping is: ${bot.players[args]?.ping}ms`));
         } else {
-            bot.chat(state.safeChat(`${user}'s ping is: ${bot.players[user]?.ping}`));
+            bot.chat(state.safeChat(`${user}'s ping is: ${bot.players[user]?.ping}ms`));
         }
     },
 
@@ -663,18 +696,9 @@ const admin_commands = {
         }
     },
 
-    [`${prefix}useraccept`]: (user, message, bot, state) => {
-        const id = message.split(`${prefix}useraccept `)[1];
-
-        if (state.pendingUsers.hasOwnProperty(id)) {
-            const pending_username = state.pendingUsers[id]
-            state.scanningUsers.push(pending_username)
-
-            bot.chat(`/w ${user} Added ${pending_username} Successfully!`)
-        } else {
-            bot.chat(`/w ${user} There's No ID ${id} Inside Pending Users.`)
-        }
-    },
+    [`${prefix}checkuses`]: (user, message, bot, state) => {
+        console.log(state.safeChat(state.bot_uses))
+    },    
 
     [`${prefix}debug`]: (user, message, bot, state) => {
         const args = message.split(`${prefix}debug `)[1];
@@ -782,7 +806,7 @@ const admin_commands = {
             bot.chat(`/w ${user} Usage -run <command?>`)
         }
     },
-    
+
     [`${prefix}say`]: (user, message, bot, state) => {
         const message_to_run = message.split(`${prefix}say `)[1];
         if (message_to_run && message_to_run.trim() !== '') {
@@ -826,5 +850,3 @@ const admin_commands = {
 }
 
 module.exports = { public_commands, admin_commands };
-
-
