@@ -330,6 +330,7 @@ module.exports = function(bot, state) {
 
     bot.on('end', (reason) => {
         console.log('[Disconnected]', reason);
+        bot.quit()
         if (state.restart) {
             state.loggedIn = false;
             state.restarted = true;
@@ -340,6 +341,7 @@ module.exports = function(bot, state) {
 
     bot.on('error', (err) => {
         console.error('[Bot Error]', err);
+        bot.quit()
         if (err.code === 'ECONNREFUSED' || err.message.includes('timed out')) {
             console.log('Attempting to reconnect...');
             state.restarted = true;
