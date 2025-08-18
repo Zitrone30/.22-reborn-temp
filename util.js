@@ -81,7 +81,7 @@ function saveBotData(state) {
       quotes: state.quotes || {},
       totalStats: state.totalStats || {},
       crystal_kills: state.crystal_kills || {},
-      crystal_victims: state.crystal_victims || {},
+      crystal_deaths: state.crystal_deaths || {},
       kills: state.crystalled || 0, 
       deaths: state.global_deaths,
       topKills: state.crystal_kills || {},
