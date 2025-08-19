@@ -11,7 +11,7 @@ const tpsBuffer = []
 
 const MAX_BUFFER = 20;
 const whitelist = ['Damix2131', 'q33a', 'ryk_cbaool',
-    'Abottomlesspit', 'MioAutoCrystal', 'NIKASTEIN', "xiNxghtMar3ix", "Lua"];
+    '1nvoke_', 'MioAutoCrystal', 'NIKASTEIN', "xiNxghtMar3ix", "Lua"];
 
 async function fetchJD(user, state) {
     const response = await fetch(`https://www.6b6t.org/pl/stats/${user}`);
@@ -320,3 +320,4 @@ module.exports = {
   spam_offenses,
   whitelist,
 };
+
