@@ -1,4 +1,4 @@
-// utils.js
+require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 
@@ -10,8 +10,9 @@ const spam_offenses = {};
 const tpsBuffer = []
 
 const MAX_BUFFER = 20;
-const whitelist = ['Damix2131', 'q33a', 'ryk_cbaool',
-    '1nvoke_', 'MioAutoCrystal', 'NIKASTEIN', "xiNxghtMar3ix", "Lua"];
+// create a a file named .env in the root directory of your project and add a WHITELIST variable with comma-separated usernames
+// for example: WHITELIST=user1,user2,user3
+const whitelist = process.env.WHITELIST ? process.env.WHITELIST.split(',').map(u => u.trim()) : [];
 
 async function fetchJD(user, state) {
     const response = await fetch(`https://www.6b6t.org/pl/stats/${user}`);
