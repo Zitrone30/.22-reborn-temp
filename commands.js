@@ -69,20 +69,6 @@ const public_commands = {
             return `${target}'s IQ is ${iq}`;
         }),
 
-    [`${prefix}kys`]: (user, message, bot, state) => {
-        const args = getArgs(message, prefix, "kys");
-        let target = args[0];
-        if (target === 'random') {
-            const players = Object.keys(bot.players);
-            target = state.random_element(players);
-        }
-        if (target && target.trim().length > 0) {
-            bot.chat(state.safeChat(`Go kill yourself ${target}`));
-        } else {
-            bot.chat(state.safeChat(`Usage: ${prefix}kys <username>`));
-        }
-    },
-
     [`${prefix}jew`]: (user, message, bot, state) => bot.chat(state.handlePercentCmd(user, prefix, message, bot, state)),
     [`${prefix}indian`]: (user, message, bot, state) => bot.chat(state.handlePercentCmd(user, prefix, message, bot, state)),
     [`${prefix}gay`]: (user, message, bot, state) => bot.chat(state.handlePercentCmd(user, prefix, message, bot, state)),

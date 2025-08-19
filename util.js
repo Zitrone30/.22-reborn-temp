@@ -168,27 +168,22 @@ function getIndefiniteArticle(word) {
 }
 
 function handlePercentCmd(user, prefix, message, bot, state, options = {}) {
-  const [fullCmd, ...rest] = message.trim().split(/\s+/);
+  const [fullCmd, ...args] = message.trim().split(/\s+/);
   const cmd = fullCmd.replace(prefix, '').toLowerCase();
-  let args = rest.join(' ');
 
-  if (!args || args.trim() === '') args = user;
+  let target = args[0] || user;
 
-  if (args.toLowerCase() === 'random') {
+  if (target.toLowerCase && target.toLowerCase() === 'random') {
     const players = Object.keys(bot.players);
-    if (players.length > 0) {
-      args = state.random_element(players);
-    } else {
-      args = user;
-    }
+    target = players.length > 0 ? state.random_element(players) : user;
   }
 
   if (options.status) {
-    return state.safeChat(`${args} is ${options.status}`);
+    return state.safeChat(`${target} is ${options.status}`);
   }
 
   if (options.customMessage) {
-    return state.safeChat(options.customMessage(args, cmd));
+    return state.safeChat(options.customMessage(target, cmd, args.slice(1)));
   }
 
   let value = Math.floor(Math.random() * 101);
@@ -201,24 +196,29 @@ function handlePercentCmd(user, prefix, message, bot, state, options = {}) {
     article = getIndefiniteArticle(cmd) + ' ';
   }
 
-  return state.safeChat(`${args} is ${article}${value}% ${cmd}`);
+  return state.safeChat(`${target} is ${article}${value}% ${cmd}`);
 }
 
-function handleTargetCommand(user, prefix, message, bot, state, label, usage, chatMessageFn) {
-  let args = message.split(`${prefix}${label} `)[1];
 
-  if (args && args.toLowerCase() === 'random') {
+function handleTargetCommand(user, prefix, message, bot, state, label, usage, chatMessageFn) {
+  const rawArgs = message.split(`${prefix}${label} `)[1];
+  const args = rawArgs ? rawArgs.trim().split(/\s+/) : [];
+
+  let target = args[0];
+
+  if (target && target.toLowerCase() === 'random') {
     const players = Object.keys(bot.players);
-    args = state.random_element(players);
+    target = state.random_element(players);
   }
 
-  if (!args || args.trim().length === 0) {
+  if (!target || target.trim().length === 0) {
     return bot.chat(state.safeChat(`Usage: ${prefix}${label} ${usage}`));
   }
 
-  const msg = chatMessageFn(user, args);
+  const msg = chatMessageFn(user, target, args.slice(1));
   return bot.chat(state.safeChat(msg));
 }
+
 
 function get_kd(target, state) {
   const hasKills = state.crystal_kills.hasOwnProperty(target);
