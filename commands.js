@@ -1,5 +1,13 @@
 const { safeChat } = require("./util");
 
+// --- Add getArgs utility function ---
+function getArgs(message, prefix, command) {
+    // Remove prefix and command from the message, then split by spaces
+    const cmdPattern = new RegExp(`^${prefix}${command}\\s*`, 'i');
+    const argsString = message.replace(cmdPattern, '').trim();
+    return argsString.length ? argsString.split(/\s+/) : [];
+}
+
 // commands.js
 const prefix = "-";
 
@@ -62,15 +70,14 @@ const public_commands = {
         }),
 
     [`${prefix}kys`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}kys `)[1];
-
-        if (args === 'random') {
-            const players = Object.keys(bot.players)
-            args = state.random_element(players);
+        const args = getArgs(message, prefix, "kys");
+        let target = args[0];
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`Go kill yourself ${args}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`Go kill yourself ${target}`));
         } else {
             bot.chat(state.safeChat(`Usage: ${prefix}kys <username>`));
         }
@@ -115,122 +122,114 @@ const public_commands = {
     },
 
     [`${prefix}based`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}based `)[1];
-        const status = Math.random() < 0.5 ? 'BASED' : 'Cringe'
-
-        if (args === 'random') {
-            const players = Object.keys(bot.players)
-            args = state.random_element(players);
+        const args = getArgs(message, prefix, "based");
+        let target = args[0];
+        const status = Math.random() < 0.5 ? 'BASED' : 'Cringe';
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args} is ${status}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} is ${status}`));
         } else {
             bot.chat(state.safeChat(`${user} is ${status}`));
         }
     },
 
     [`${prefix}edge`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}edge `)[1];
-        const response = Math.floor(Math.random() * 356)
-        if (args === 'random') { 
-            const players = Object.keys(bot.players)
-            args = state.random_element(players);
+        const args = getArgs(message, prefix, "edge");
+        let target = args[0];
+        const response = Math.floor(Math.random() * 356);
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args} has an edging streak of ${response} days`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} has an edging streak of ${response} days`));
         } else {
             bot.chat(state.safeChat(`${user} has an edging streak of ${response} days`));
-        }        
+        }
     },
 
     [`${prefix}love`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}love `)[1];
-        if (!args || args.trim().split(" ").length < 2) {
+        const args = getArgs(message, prefix, "love");
+        if (args.length < 2) {
             return bot.chat(state.safeChat(`Usage: ${prefix}love <user1> <user2>`));
         }
-
-        const [user1, user2] = args.trim().split(" ");
+        const [user1, user2] = args;
         const percent = Math.floor(Math.random() * 101);
         bot.chat(state.safeChat(`${user1} <3 ${user2} = ${percent}% match`));
     },
 
     [`${prefix}rate`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}rate `)[1];
+        const args = getArgs(message, prefix, "rate");
+        let target = args[0];
         const rating = Math.floor(Math.random() * 10) + 1;
-
-        if (args === 'random') {
-            const players = Object.keys(bot.players)
-            args = state.random_element(players);
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args} is a ${rating}/10`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} is a ${rating}/10`));
         } else {
             bot.chat(state.safeChat(`${user} is a ${rating}/10`));
         }
     },
 
     [`${prefix}stfu`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}stfu `)[1];
-
-        if (args === 'random') {
-            const players = Object.keys(bot.players)
-            args = state.random_element(players);
+        const args = getArgs(message, prefix, "stfu");
+        let target = args[0];
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`Shut the fuck up ${args}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`Shut the fuck up ${target}`));
         } else {
             bot.chat(state.safeChat(`Usage: ${prefix}stfu <username>`));
         }
     },
 
     [`${prefix}racist`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}racist `)[1];
+        const args = getArgs(message, prefix, "racist");
+        let target = args[0];
         const percent = Math.floor(Math.random() * 101);
-
-        if (args === 'random') {
+        if (target === 'random') {
             const players = Object.keys(bot.players);
-            args = state.random_element(players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args} is ${percent}% racist`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} is ${percent}% racist`));
         } else {
             bot.chat(state.safeChat(`${user} is ${percent}% racist`));
         }
     },
 
     [`${prefix}insult`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}insult `)[1];
+        const args = getArgs(message, prefix, "insult");
+        let target = args[0];
         const insult = state.random_element(state.insults);
-
-        if (args === 'random') {
+        if (target === 'random') {
             const players = Object.keys(bot.players);
-            args = state.random_element(players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args} ${insult}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} ${insult}`));
         } else {
             bot.chat(state.safeChat(`${user} ${insult}`));
         }
     },
 
     [`${prefix}mental`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}mental `)[1];
-
+        const args = getArgs(message, prefix, "mental");
+        let target = args[0];
         const result = state.random_element(state.illnesses);
-
-        if (args === 'random') {
+        if (target === 'random') {
             const players = Object.keys(bot.players);
-            args = state.random_element(players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args} diagnosed with ${result}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} diagnosed with ${result}`));
         } else {
             bot.chat(state.safeChat(`${user} diagnosed with ${result}`));
         }
@@ -261,109 +260,104 @@ const public_commands = {
         bot.chat(state.handlePercentCmd(user, prefix, message, bot, state)),
 
     [`${prefix}cap`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}cap `)[1];
-
+        const args = getArgs(message, prefix, "cap");
+        let target = args[0];
         const result = state.random_element(state.cap_replies);
-
-        if (args === 'random') {
+        if (target === 'random') {
             const players = Object.keys(bot.players);
-            args = state.random_element(players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args}: ${result}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target}: ${result}`));
         } else {
             bot.chat(state.safeChat(`${user}: ${result}`));
         }
     },
 
     [`${prefix}gender`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}gender `)[1];
+        const args = getArgs(message, prefix, "gender");
+        let target = args[0];
         const result = state.random_element(state.gender_results);
-
-        if (args === 'random') {
+        if (target === 'random') {
             const players = Object.keys(bot.players);
-            args = state.random_element(players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args}: ${result}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target}: ${result}`));
         } else {
             bot.chat(state.safeChat(`${user}: ${result}`));
         }
     },
     [`${prefix}npc`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}npc `)[1];
+        const args = getArgs(message, prefix, "npc");
+        let target = args[0];
         const result = state.random_element(state.npc_replies);
-
-        if (args === 'random') {
+        if (target === 'random') {
             const players = Object.keys(bot.players);
-            args = state.random_element(players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args}: ${result}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target}: ${result}`));
         } else {
             bot.chat(state.safeChat(`${user}: ${result}`));
         }
     },
 
     [`${prefix}screen`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}screen `)[1];
+        const args = getArgs(message, prefix, "screen");
+        let target = args[0];
         const screen = state.random_element(state.screen_replies);
-
-        if (args === 'random') {
+        if (target === 'random') {
             const players = Object.keys(bot.players);
-            args = state.random_element(players);
+            target = state.random_element(players);
         }
-
-        if (args && args.trim().length > 0) {
-            bot.chat(state.safeChat(`${args}'s screen right now: ${screen}`));
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target}'s screen right now: ${screen}`));
         } else {
             bot.chat(state.safeChat(`${user}'s screen right now: ${screen}`));
         }
     },
 
     [`${prefix}boobs`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}boobs `)[1];
+        const args = getArgs(message, prefix, "boobs");
+        let target = args[0];
         const randomSize = state.sizes[Math.floor(Math.random() * state.sizes.length)];
-        
-        if (args && args.trim().length > 0) {
-            if (args === 'random') {
-                const players = Object.keys(bot.players);
-                args = state.random_element(players);
-            }
-            bot.chat(state.safeChat(`${args} has: ${randomSize}-cups`));
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
+        }
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} has: ${randomSize}-cups`));
         } else {
             bot.chat(state.safeChat(`${user} has: ${randomSize}-cups`));
         }
     },
 
     [`${prefix}fetish`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}fetish `)[1];
+        const args = getArgs(message, prefix, "fetish");
+        let target = args[0];
         const randomFetish = state.fetish_results[Math.floor(Math.random() * state.fetish_results.length)];
-        
-        if (args && args.trim().length > 0) {
-            if (args === 'random') {
-                const players = Object.keys(bot.players);
-                args = state.random_element(players);
-            }            
-            bot.chat(state.safeChat(`${args}'s fetish is: ${randomFetish}`));
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
+        }
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target}'s fetish is: ${randomFetish}`));
         } else {
             bot.chat(state.safeChat(`${user}'s fetish is: ${randomFetish}`));
         }
     },
 
     [`${prefix}shower`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}shower `)[1];
-        const days = Math.floor(Math.random() * 365)
-        
-        if (args && args.trim().length > 0) {
-            if (args === 'random') {
-                const players = Object.keys(bot.players);
-                args = state.random_element(players);
-            }            
-            bot.chat(state.safeChat(`${args} has showered last time ${days} days ago`));
+        const args = getArgs(message, prefix, "shower");
+        let target = args[0];
+        const days = Math.floor(Math.random() * 365);
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
+        }
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target} has showered last time ${days} days ago`));
         } else {
             bot.chat(state.safeChat(`${user} has showered last time ${days} days ago`));
         }
@@ -385,12 +379,12 @@ const public_commands = {
     },
 
     [`${prefix}choose`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}choose `)[1];
-        if (!args) return bot.chat(state.safeChat(`Usage: ${prefix}choose option1, option2, ...`));
-        const options = args.split(" ").map(x => x.trim()).filter(Boolean) || args.split(",").map(x => x.trim()).filter(Boolean);
-        if (options.length < 2) return bot.chat(state.safeChat("Give me at least 2 choices."));
-        const choice = state.random_element(options);
-        bot.chat(state.safeChat(`I choose: ${choice}`));
+    const args = getArgs(message, prefix, "choose");
+    if (!args.length) return bot.chat(state.safeChat(`Usage: ${prefix}choose option1, option2, ...`));
+    const options = args.join(" ").split(",").map(x => x.trim()).filter(Boolean);
+    if (options.length < 2) return bot.chat(state.safeChat("Give me at least 2 choices."));
+    const choice = state.random_element(options);
+    bot.chat(state.safeChat(`I choose: ${choice}`));
     },
 
     [`${prefix}playerlist`]: (user, message, bot, state) => {
@@ -411,30 +405,27 @@ const public_commands = {
     },
 
     [`${prefix}kd`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}kd `)[1];
-        if (args && args.trim().length > 0) {
-
-            if (args === 'random') {
-                const players = Object.keys(bot.players)
-                args = state.random_element(players);
-            }
-            const target = args.trim();
-            bot.chat(state.safeChat(state.get_kd(target, state)))
+        const args = getArgs(message, prefix, "kd");
+        let target = args[0];
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
+        }
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(state.get_kd(target, state)));
         } else {
-            bot.chat(state.safeChat(state.get_kd(user, state)))
+            bot.chat(state.safeChat(state.get_kd(user, state)));
         }
     },
 
     [`${prefix}quote`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}quote `)[1];
-
-        if (args && args.trim().length > 0) {
-            if (args === 'random') {
-                const players = Object.keys(bot.players)
-                args = state.random_element(players);
-            }
-            const target = args.trim();
-
+        const args = getArgs(message, prefix, "quote");
+        let target = args[0];
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
+        }
+        if (target && target.trim().length > 0) {
             if (state.quotes[target] && state.quotes[target].length > 0) {
                 const randomQuote = state.quotes[target][Math.floor(Math.random() * state.quotes[target].length)];
                 bot.chat(state.safeChat(`Quote from ${target}: "${randomQuote}"`));
@@ -459,12 +450,12 @@ const public_commands = {
     },
 
     [`${prefix}paranoia`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}paranoia `)[1];
+        const args = getArgs(message, prefix, "paranoia");
+        let target = args[0];
         const percent = Math.floor(Math.random() * 101);
-        
-        if (args === 'random') args = state.random_element(Object.keys(bot.players));
-        if (args && args.trim()) {
-            bot.chat(state.safeChat(`${args} is ${percent}% paranoid`));
+        if (target === 'random') target = state.random_element(Object.keys(bot.players));
+        if (target && target.trim()) {
+            bot.chat(state.safeChat(`${target} is ${percent}% paranoid`));
         } else {
             bot.chat(state.safeChat(`${user} is ${percent}% paranoid`));
         }
@@ -475,18 +466,16 @@ const public_commands = {
     },
 
     [`${prefix}jd`]: async (user, message, bot, state) => {
-        let args = message.split(`${prefix}jd `)[1];
-
-        if (!args || args.trim() === '') args = user;
-        if (!state.joindates[args]) {
-            state.joindates[args] = await state.fetchJD(args.trim()); // clearly that worked
+        const args = getArgs(message, prefix, "jd");
+        let target = args[0] || user;
+        if (!state.joindates[target]) {
+            state.joindates[target] = await state.fetchJD(target.trim());
         }
-
-        if (state.joindates[args] !== null) {
-            bot.chat(state.safeChat(`${args} joined on: ${state.joindates[args]}`))
+        if (state.joindates[target] !== null) {
+            bot.chat(state.safeChat(`${target} joined on: ${state.joindates[target]}`));
         } else {
-            bot.chat(state.safeChat(`User ${args} doesn't exist or never joined.`))
-            delete state.joindates[args];
+            bot.chat(state.safeChat(`User ${target} doesn't exist or never joined.`));
+            delete state.joindates[target];
         }
     },
 
@@ -538,29 +527,28 @@ const public_commands = {
         }
     },*/
     [`${prefix}count`]: (user, message, bot, state) => {
-        let args = parseInt(message.split(`${prefix}count `)[1]);
-
-        if (isNaN(args)) {
-            bot.chat(state.safeChat("Please provide an valid number."))
-        }
-        if (args !== state.current_count) {
+        const args = getArgs(message, prefix, "count");
+        const num = parseInt(args[0]);
+        if (isNaN(num)) {
+            bot.chat(state.safeChat("Please provide a valid number."));
+        } else if (num !== state.current_count) {
             bot.chat(state.safeChat(`Wrong number! Expected: ${state.current_count}. Resetting to 0.`));
             state.current_count = 0;
         } else {
-            state.current_count++
-            bot.chat(state.safeChat(`Correct! Continue counting by running: -count ${state.current_count}`))
+            state.current_count++;
+            bot.chat(state.safeChat(`Correct! Continue counting by running: -count ${state.current_count}`));
         }
     },
 
     [`${prefix}ping`]: (user, message, bot, state) => {
-        let args = message.split(`${prefix}ping `)[1];
-
-        if (args && args.trim().length > 0) {
-            if (args === 'random') {
-                const players = Object.keys(bot.players);
-                args = state.random_element(players);
-            }            
-            bot.chat(state.safeChat(`${args}'s ping is: ${bot.players[args]?.ping}ms`));
+        const args = getArgs(message, prefix, "ping");
+        let target = args[0];
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
+        }
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`${target}'s ping is: ${bot.players[target]?.ping}ms`));
         } else {
             bot.chat(state.safeChat(`${user}'s ping is: ${bot.players[user]?.ping}ms`));
         }
@@ -593,17 +581,14 @@ const public_commands = {
     },
 
     [`${prefix}marry`]: (user, message, bot, state) => {
-        let target = message.split(`${prefix}marry `)[1];
-
-        if (!target) return bot.chat(state.safeChat(`Usage: ${prefix}marry <player>`));
-        if (user === target) return bot.chat(state.safeChat(`${user}, you can't marry yourself.`));
-
-        if (state.marriages[user]) return bot.chat(state.safeChat(`${user}, you're already married to ${state.marriages[user]}.`));
-        if (state.marriages[target]) return bot.chat(state.safeChat(`${target} is already married to ${state.marriages[target]}.`));
-
-        state.pendingMarriage[target] = user;
-
-        bot.chat(`/msg ${target} ${user} wants to marry you! Type "${prefix}accept" to accept.`);
+    const args = getArgs(message, prefix, "marry");
+    let target = args[0];
+    if (!target) return bot.chat(state.safeChat(`Usage: ${prefix}marry <player>`));
+    if (user === target) return bot.chat(state.safeChat(`${user}, you can't marry yourself.`));
+    if (state.marriages[user]) return bot.chat(state.safeChat(`${user}, you're already married to ${state.marriages[user]}.`));
+    if (state.marriages[target]) return bot.chat(state.safeChat(`${target} is already married to ${state.marriages[target]}.`));
+    state.pendingMarriage[target] = user;
+    bot.chat(`/msg ${target} ${user} wants to marry you! Type "${prefix}accept" to accept.`);
     },
 
     // --- ACCEPT MARRIAGE ---
@@ -620,15 +605,13 @@ const public_commands = {
 
     // --- DIVORCE REQUEST ---
     [`${prefix}divorce`]: (user, message, bot, state) => {
-        let target = message.split(`${prefix}divorce `)[1];
+        const args = getArgs(message, prefix, "divorce");
+        let target = args[0];
         if (!target) return bot.chat(state.safeChat(`Usage: ${prefix}divorce <player>`));
-
         if (!state.marriages[user] || state.marriages[user] !== target) {
             return bot.chat(state.safeChat(`${user}, you are not married to ${target}.`));
         }
-
         state.pendingDivorce[target] = user;
-
         bot.chat(`/msg ${target} ${user} wants to divorce you. Type "${prefix}acceptdivorce" to confirm.`);
     },
 
@@ -701,11 +684,9 @@ const admin_commands = {
     },    
 
     [`${prefix}debug`]: (user, message, bot, state) => {
-        const args = message.split(`${prefix}debug `)[1];
-
-        if (args && args.trim().length > 0) {
-            const section = args.trim();
-
+        const args = getArgs(message, prefix, "debug");
+        const section = args[0];
+        if (section && section.trim().length > 0) {
             if (section === 'basic') {
                 const loadedChunks = Object.keys(bot.world?.chunks || {}).length || 'None';
                 const openWindow = bot.currentWindow?.title || 'None';
