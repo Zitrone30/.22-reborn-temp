@@ -203,13 +203,6 @@ const public_commands = {
         }
     },
 
-    // Add the new -info command here:
-    [`${prefix}info`]: (user, message, bot, state) => {
-        bot.chat("I'm a Bot Created By Damix2131, ryk_cbaool and 1nvoke_. Try -help To Use My Commands. :D"),
-            
-    },
-    
-
     [`${prefix}insult`]: (user, message, bot, state) => {
         let args = message.split(`${prefix}insult `)[1];
         const insult = state.random_element(state.insults);
@@ -857,4 +850,5 @@ const admin_commands = {
 }
 
 module.exports = { public_commands, admin_commands };
+
 
