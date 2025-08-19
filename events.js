@@ -255,6 +255,15 @@ module.exports = function(bot, state) {
             }
         }
 
+         if (message.includes("/tpy")) {
+            if (message.includes("1nvoke_")) {
+                bot.chat(`/tpy 1nvoke_`);
+            } else {
+                const decline_username = message.split(' wants to teleport to you.')[0]
+                bot.chat(`/tpn ${decline_username}`);
+            }
+        }
+
         for (const response in responses) {
             if (message.includes(response) || command.includes(response)) {
                 responses[response](message);
@@ -349,3 +358,4 @@ module.exports = function(bot, state) {
         }
     });
 };
+
