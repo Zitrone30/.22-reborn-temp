@@ -1,6 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
+const whitelistFile = require('
 
 let startTime = Date.now();
 
@@ -321,4 +322,5 @@ module.exports = {
   spam_offenses,
   whitelist,
 };
+
 
