@@ -1,0 +1,74 @@
+name: 22bot
+
+on:
+  workflow_dispatch:
+#  schedule:
+#    - cron: '0 */6 * * *'  # every 6 hours
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 370  # 6h + buffer
+    env:
+      MC_PASSWORD: ${{ secrets.MC_PASSWORD }}
+      STORAGE_REPO_TOKEN: ${{ secrets.STORAGE_REPO_TOKEN }}
+      MAIN_REPO_PAT: ${{ secrets.MAIN_REPO_PAT }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Ensure STORAGE_REPO_TOKEN is set
+        run: |
+          if [ -z "${{ secrets.STORAGE_REPO_TOKEN }}" ]; then
+            echo "❌ Error: STORAGE_REPO_TOKEN is not set"
+            exit 1
+          fi
+
+      - name: Clone archive repo (restore previous data)
+        run: |
+          git clone "https://x-access-token:${{ secrets.STORAGE_REPO_TOKEN }}@github.com/Damix-hash/.22-archive.git" archive-repo
+          mkdir -p output
+          cp -r archive-repo/output/* output/ || echo "No previous output files to restore"
+
+      - name: Run bot for 5 hours 59 minutes then stop
+        run: |
+          npm start &
+          BOT_PID=$!
+          echo "Bot started with PID $BOT_PID"
+          sleep $((5 * 3600 + 59 * 60))  # 5h 59m
+          echo "Stopping bot"
+          kill $BOT_PID
+          wait $BOT_PID || true
+
+      - name: Copy output files to archive repo (update archive)
+        run: |
+          mkdir -p archive-repo/output
+          cp -r output/* archive-repo/output/ || echo "No output files to copy"
+
+      - name: Commit and push to archive repo
+        run: |
+          cd archive-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add output/
+          git commit -m "Autosave bot_data.json from bot run [ci skip]" || echo "No changes to commit"
+          git push origin main
+
+      - name: Re-trigger this workflow (self-restart)
+        env:
+          PAT: ${{ secrets.MAIN_REPO_PAT }}
+        run: |
+          echo "Re-triggering workflow..."
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $PAT" \
+            https://api.github.com/repos/Damix-hash/.22/actions/workflows/bot.yml/dispatches \
+            -d '{"ref":"main"}'
