@@ -1,1 +1,5 @@
-module.exports = ["ryk_cbaool", "Damix2131", "q33a"];
+module.exports = [
+  "Damix2131",
+  "ryk_cbaool",
+  "q33a"
+];
