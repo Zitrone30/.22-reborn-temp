@@ -1,6 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
+const whitelistFile = require('./whitelisted.js');
 
 let startTime = Date.now();
 
@@ -12,13 +13,17 @@ const tpsBuffer = []
 const MAX_BUFFER = 20;
 // create a a file named .env in the root directory of your project and add a WHITELIST variable with comma-separated usernames
 // for example: WHITELIST=user1,user2,user3
-const whitelist = process.env.WHITELIST ? process.env.WHITELIST.split(',').map(u => u.trim()) : [];
+const whitelist = whitelistFile;
 
 async function fetchJD(user, state) {
     const response = await fetch(`https://www.6b6t.org/pl/stats/${user}`);
     const text = await response.text()
     if (!text.includes("since")) return null;
     return String(text.split("since")[1].split("</span></div></div></div>")[0].replace("<!-- -->", "").trim());
+}
+
+function whitelisted_users(user) {
+  return whitelist.includes(user.trim());
 }
 
 function getCurrentTPS() {
@@ -329,4 +334,7 @@ module.exports = {
   spam_offenses,
   whitelist,
 };
+
+
+
 
