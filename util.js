@@ -1,7 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const whitelistFile = require('./whitelisted.js');
 
 let startTime = Date.now();
 

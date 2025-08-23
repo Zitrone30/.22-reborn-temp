@@ -54,13 +54,21 @@ npm install
 
 ## Usage
 
-1. Set environment variable/s:
+1. Setup your .env file:
 
-```bash
-export MC_PASSWORD="your_password"
-export STORAGE_REPO_TOKEN="your_PAT_token"
-export MAIN_REPO_PAT="your_PAT_token"
+- Create a file named ".env" in the same folder as the bot
+
+- Put following into the file and replace placeholders 
+
+```env
+WHITELIST=user1,user2,user3,etc
+SUPERUSER=user1,user2,user3,etc
+MC_PASSWORD=mc_yourpasswordhere
+STORAGE_REPO_TOKEN=ghp_yourtokenhere
+MAIN_REPO_PAT=ghp_yourtokenhere
 ```
+### WARNING, Never share your .env file and always make sure it is inside of .gitignore
+
 More about P.A.T (Personal Access Token) on github read [here.](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 You also need to initiate your own project path for archiving data, or just code your own
 
