@@ -1,6 +1,6 @@
 const { safeChat } = require("./util");
 require('dotenv').config();
-const superusers = process.env.SUPERUSER ? process.env.SUPERUSER.split(',').map(u => u.trim()) : [];
+const superusers = process.env.SUPERUSER ? process.env.SUPERUSER.split(',').map(u => u.trim()).filter(Boolean): [];
 
 // --- Add getArgs utility function ---
 function getArgs(message, prefix, command) {
