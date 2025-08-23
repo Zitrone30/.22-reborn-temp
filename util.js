@@ -173,6 +173,10 @@ function handlePercentCmd(user, prefix, message, bot, state, options = {}) {
 
   let target = args[0] || user;
 
+  if (target === '|') {
+    target = user;
+  }
+
   if (target.toLowerCase && target.toLowerCase() === 'random') {
     const players = Object.keys(bot.players);
     target = players.length > 0 ? state.random_element(players) : user;
@@ -205,6 +209,10 @@ function handleTargetCommand(user, prefix, message, bot, state, label, usage, ch
   const args = rawArgs ? rawArgs.trim().split(/\s+/) : [];
 
   let target = args[0];
+
+  if (target === '|') {
+    target = user;
+  }
 
   if (target && target.toLowerCase() === 'random') {
     const players = Object.keys(bot.players);
