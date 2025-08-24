@@ -1,4 +1,6 @@
 const { safeChat } = require("./util");
+require('dotenv').config();
+const superusers = process.env.SUPERUSER ? process.env.SUPERUSER.split(',').map(u => u.trim()).filter(Boolean): [];
 
 // --- Add getArgs utility function ---
 function getArgs(message, prefix, command) {
@@ -114,6 +116,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} is ${status}`));
@@ -129,6 +133,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} has an edging streak of ${response} days`));
@@ -154,6 +160,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} is a ${rating}/10`));
@@ -168,6 +176,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`Shut the fuck up ${target}`));
@@ -183,6 +193,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} is ${percent}% racist`));
@@ -198,6 +210,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} ${insult}`));
@@ -213,6 +227,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} diagnosed with ${result}`));
@@ -252,6 +268,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target}: ${result}`));
@@ -267,6 +285,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target}: ${result}`));
@@ -281,6 +301,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target}: ${result}`));
@@ -296,6 +318,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target}'s screen right now: ${screen}`));
@@ -311,6 +335,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} has: ${randomSize}-cups`));
@@ -326,6 +352,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target}'s fetish is: ${randomFetish}`));
@@ -341,6 +369,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target} has showered last time ${days} days ago`));
@@ -396,6 +426,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(state.get_kd(target, state)));
@@ -410,6 +442,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             if (state.quotes[target] && state.quotes[target].length > 0) {
@@ -440,6 +474,7 @@ const public_commands = {
         let target = args[0];
         const percent = Math.floor(Math.random() * 101);
         if (target === 'random') target = state.random_element(Object.keys(bot.players));
+        else if (target === '|') target = user;
         if (target && target.trim()) {
             bot.chat(state.safeChat(`${target} is ${percent}% paranoid`));
         } else {
@@ -454,6 +489,12 @@ const public_commands = {
     [`${prefix}jd`]: async (user, message, bot, state) => {
         const args = getArgs(message, prefix, "jd");
         let target = args[0] || user;
+        if (target === 'random') {
+            const players = Object.keys(bot.players);
+            target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
+        }
         if (!state.joindates[target]) {
             state.joindates[target] = await state.fetchJD(target.trim());
         }
@@ -532,6 +573,8 @@ const public_commands = {
         if (target === 'random') {
             const players = Object.keys(bot.players);
             target = state.random_element(players);
+        } else if (target === '|') {
+            target = user;
         }
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`${target}'s ping is: ${bot.players[target]?.ping}ms`));
@@ -660,7 +703,7 @@ const admin_commands = {
     // },
 
     [`${prefix}forcesave`]: (user, message, bot, state) => {
-        if (user === 'Damix2131') {
+            if (superusers.map(u => u.toLowerCase()).includes(user.toLowerCase())) {
             state.saveBotData(state)
         }
     },
@@ -797,7 +840,7 @@ const admin_commands = {
 
     [`${prefix}remwl`]: (user, message, bot, state) => {
         let args = message.split(`${prefix}remwl `)[1];
-        if (args.toLowerCase() !== 'damix2131') {
+        if (superusers.map(u => u.toLowerCase()).includes(user.toLowerCase())) {
             if (!state.whitelist.includes(args)) {
                 bot.whisper(user, `${args} is not in the whitelist.`);
                 return;
@@ -809,7 +852,7 @@ const admin_commands = {
         }
     },
     [`${prefix}timeout`]: (user, message, bot, state) => {
-        if (user === 'Damix2131') {
+        if (superusers.map(u => u.toLowerCase()).includes(user.toLowerCase())) {
             bot.chat(state.safeChat("Removing keep_alive listener!, timing out in 30 seconds as of now."))
             bot._client.removeAllListeners('keep_alive');    
         }

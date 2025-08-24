@@ -7,11 +7,25 @@ const tpsPlugin = require('mineflayer-tps')(mineflayer);
 const utils = require('./util');
 const createCommands = require('./commands');
 const registerEvents = require('./events');
+const requiredVars = ["MC_PASSWORD", "STORAGE_REPO_TOKEN", "MAIN_REPO_PAT"];
+const placeholders = ["ghp_yourtokenhere", "123456"];
+
+for (const v of requiredVars) {
+  if (!process.env[v]) {
+    throw new Error(`${v} is not set`);
+  }
+  if (placeholders.includes(process.env[v])) {
+    throw new Error(`${v} is still set to a placeholder value`);
+  }
+}
+
+
 
 let started_saving = false // this is so bot wont spam in console that it saved and loaded data constantly.
 
 function startup() {
     const PASSWORD = process.env.MC_PASSWORD;
+
     const prefix = '-';
 
     const bot = mineflayer.createBot({
