@@ -9,6 +9,11 @@ jobs:
   run-bot:
     runs-on: ubuntu-latest
     timeout-minutes: 370  # 6h + buffer
+    env:
+      MC_PASSWORD: ${{ secrets.MC_PASSWORD }}
+      STORAGE_REPO_TOKEN: ${{ secrets.STORAGE_REPO_TOKEN }}
+      MAIN_REPO_PAT: ${{ secrets.MAIN_REPO_PAT }}
+      DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -21,46 +26,52 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Load environment variables from .env
-        run: |
-          set -a
-          source .env
-          set +a
-
-      - name: Validate environment variables
-        run: |
-          REQUIRED_VARS=("MC_PASSWORD" "STORAGE_REPO_TOKEN" "MAIN_REPO_PAT")
-          PLACEHOLDERS=("ghp_yourtokenhere" "123456")  # Add any placeholder values you want to detect
-
-          for VAR in "${REQUIRED_VARS[@]}"; do
-            VAL="${!VAR}"
-            if [ -z "$VAL" ]; then
-              echo "❌ Error: $VAR is empty"
-              exit 1
-            fi
-            for PH in "${PLACEHOLDERS[@]}"; do
-              if [ "$VAL" = "$PH" ]; then
-                echo "❌ Error: $VAR is still set to placeholder ($PH)"
-                exit 1
-              fi
-            done
-          done
-
       - name: Clone archive repo (restore previous data)
         run: |
-          git clone "https://x-access-token:${STORAGE_REPO_TOKEN}@github.com/Damix-hash/.22-archive.git" archive-repo
+          git clone https://x-access-token: ${{ secrets.STORAGE_REPO_TOKEN }}@github.com/Damix-hash/.22-archive.git archive-repo
           mkdir -p output
           cp -r archive-repo/output/* output/ || echo "No previous output files to restore"
 
       - name: Run bot for 5 hours 59 minutes then stop
         run: |
-          npm start &
+          node -e '
+          const { spawn } = require("child_process");
+
+          const secrets = [
+            "DBG_KEY_CHECK_1982",
+            process.env.MC_PASSWORD,
+            process.env.STORAGE_REPO_TOKEN,
+            process.env.MAIN_REPO_PAT
+          ].filter(Boolean);
+
+          const bot = spawn("npm", ["start"]);
+
+          const filterOutput = data => {
+            let output = data.toString();
+            for (const secret of secrets) {
+              if (secret && output.includes(secret)) {
+                output = output.replace(new RegExp(secret, "g"), "[REDACTED]");
+              }
+            }
+            process.stdout.write(output);
+          };
+
+          bot.stdout.on("data", filterOutput);
+          bot.stderr.on("data", filterOutput);
+
+          bot.on("close", code => {
+            console.log(`Bot exited with code ${code}`);
+            process.exit(code);
+          });
+          ' &
+
           BOT_PID=$!
           echo "Bot started with PID $BOT_PID"
-          sleep $((5 * 3600 + 59 * 60))  # 5h 59m
+          sleep $((5 * 3600 + 59 * 60))
           echo "Stopping bot"
           kill $BOT_PID
           wait $BOT_PID || true
+
 
       - name: Copy output files to archive repo (update archive)
         run: |
@@ -77,10 +88,12 @@ jobs:
           git push origin main
 
       - name: Re-trigger this workflow (self-restart)
+        env:
+          PAT: ${{ secrets.MAIN_REPO_PAT }}
         run: |
           echo "Re-triggering workflow..."
           curl -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${MAIN_REPO_PAT}" \
+            -H "Authorization: Bearer $PAT" \
             https://api.github.com/repos/Damix-hash/.22/actions/workflows/bot.yml/dispatches \
             -d '{"ref":"main"}'
