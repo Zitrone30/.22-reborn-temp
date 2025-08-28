@@ -210,18 +210,6 @@ module.exports = function(bot, state) {
 
         if (message.includes("died") && !message.includes('»')) {
             state.global_deaths++;
-
-            if (message.includes('vined_on_top')) {
-                state.vined_on_top_deaths++;
-            }
-
-            if (message.includes('i_am_vined')) {
-                state.i_am_vined_deaths++;
-            }
-
-            if (message.includes('Damix2131')) {
-                state.damix_deaths++;
-            }
         }
 
         if (message.includes("using an end crystal") && !message.includes('»')) {
@@ -234,33 +222,6 @@ module.exports = function(bot, state) {
             if (get_killer !== get_victim) {
                 state.crystal_kills[get_killer] = (state.crystal_kills[get_killer] || 0) + 1;
                 state.crystal_deaths[get_victim] = (state.crystal_deaths[get_victim] || 0) + 1;
-            }
-        }
-
-        if (message.includes("/tpy")) {
-            if (message.includes("Damix2131")) {
-                bot.chat(`/tpy Damix2131`);
-            } else {
-                const decline_username = message.split(' wants to teleport to you.')[0]
-                bot.chat(`/tpn ${decline_username}`);
-            }
-        }
-
-        if (message.includes("/tpy")) {
-            if (message.includes("ryk_cbaool")) {
-                bot.chat(`/tpy ryk_cbaool`);
-            } else {
-                const decline_username = message.split(' wants to teleport to you.')[0]
-                bot.chat(`/tpn ${decline_username}`);
-            }
-        }
-
-         if (message.includes("/tpy")) {
-            if (message.includes("1nvoke_")) {
-                bot.chat(`/tpy 1nvoke_`);
-            } else {
-                const decline_username = message.split(' wants to teleport to you.')[0]
-                bot.chat(`/tpn ${decline_username}`);
             }
         }
 

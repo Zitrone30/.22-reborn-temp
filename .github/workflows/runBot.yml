@@ -9,10 +9,6 @@ jobs:
   run-bot:
     runs-on: ubuntu-latest
     timeout-minutes: 370  # 6h + buffer
-    env:
-      MC_PASSWORD: ${{ secrets.MC_PASSWORD }}
-      STORAGE_REPO_TOKEN: ${{ secrets.STORAGE_REPO_TOKEN }}
-      MAIN_REPO_PAT: ${{ secrets.MAIN_REPO_PAT }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -25,16 +21,34 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Ensure STORAGE_REPO_TOKEN is set
+      - name: Load environment variables from .env
         run: |
-          if [ -z "${{ secrets.STORAGE_REPO_TOKEN }}" ]; then
-            echo "❌ Error: STORAGE_REPO_TOKEN is not set"
-            exit 1
-          fi
+          set -a
+          source .env
+          set +a
+
+      - name: Validate environment variables
+        run: |
+          REQUIRED_VARS=("MC_PASSWORD" "STORAGE_REPO_TOKEN" "MAIN_REPO_PAT")
+          PLACEHOLDERS=("ghp_yourtokenhere" "123456")  # Add any placeholder values you want to detect
+
+          for VAR in "${REQUIRED_VARS[@]}"; do
+            VAL="${!VAR}"
+            if [ -z "$VAL" ]; then
+              echo "❌ Error: $VAR is empty"
+              exit 1
+            fi
+            for PH in "${PLACEHOLDERS[@]}"; do
+              if [ "$VAL" = "$PH" ]; then
+                echo "❌ Error: $VAR is still set to placeholder ($PH)"
+                exit 1
+              fi
+            done
+          done
 
       - name: Clone archive repo (restore previous data)
         run: |
-          git clone "https://x-access-token:${{ secrets.STORAGE_REPO_TOKEN }}@github.com/Damix-hash/.22-archive.git" archive-repo
+          git clone "https://x-access-token:${STORAGE_REPO_TOKEN}@github.com/Damix-hash/.22-archive.git" archive-repo
           mkdir -p output
           cp -r archive-repo/output/* output/ || echo "No previous output files to restore"
 
@@ -63,12 +77,10 @@ jobs:
           git push origin main
 
       - name: Re-trigger this workflow (self-restart)
-        env:
-          PAT: ${{ secrets.MAIN_REPO_PAT }}
         run: |
           echo "Re-triggering workflow..."
           curl -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $PAT" \
+            -H "Authorization: Bearer ${MAIN_REPO_PAT}" \
             https://api.github.com/repos/Damix-hash/.22/actions/workflows/bot.yml/dispatches \
             -d '{"ref":"main"}'

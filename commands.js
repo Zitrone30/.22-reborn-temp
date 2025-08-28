@@ -50,7 +50,7 @@ const public_commands = {
     },
 
     [`${prefix}uptime`]: (user, message, bot, state) => bot.chat(state.safeChat(`Uptime: ${state.get_uptime()}`)),
-    [`${prefix}deaths`]: (user, message, bot, state) => bot.chat(state.safeChat(`Bot ${state.deaths}, Global: ${state.global_deaths}, vined_on_top: ${state.vined_on_top_deaths}, i_am_vined: ${state.i_am_vined_deaths}, Damix2131 ${state.damix_deaths}`)),
+    [`${prefix}deaths`]: (user, message, bot, state) => bot.chat(state.safeChat(`Bot ${state.deaths}, Global: ${state.global_deaths}`)),
     [`${prefix}health`]: (user, message, bot, state) => bot.chat(state.safeChat(`Bot has ${bot.health.toFixed(1)} hearts`)),
 
     [`${prefix}rape`]: (user, message, bot, state) =>
