@@ -178,7 +178,9 @@ const public_commands = {
             target = state.random_element(players);
         } else if (target === '|') {
             target = user;
-        }
+        } else if (!bot.players[target])
+            return;
+
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`Shut the fuck up ${target}`));
         } else {
@@ -702,6 +704,16 @@ const admin_commands = {
     //   bot.chat(state.safeChat(`Hotspot logger is now ${scan_hotspot ? "ON" : "OFF"}!`);
     // },
 
+    [`${prefix}ignore`]: (user, message, bot, state) => {
+        const args = getArgs(message, prefix, "ignore");
+        let target = args[0];
+        if (target && target.trim().length > 0) {
+            bot.chat(state.safeChat(`/ignore ${target}`));
+        } else {
+            bot.chat(state.safeChat(`Usage: ${prefix}ignore <username>`));
+        }
+    },
+
     [`${prefix}forcesave`]: (user, message, bot, state) => {
             if (superusers.map(u => u.toLowerCase()).includes(user.toLowerCase())) {
             state.saveBotData(state)
@@ -860,5 +872,3 @@ const admin_commands = {
 }
 
 module.exports = { public_commands, admin_commands };
-
-
