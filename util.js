@@ -12,10 +12,7 @@ const tpsBuffer = []
 const MAX_BUFFER = 20;
 // create a a file named .env in the root directory of your project and add a WHITELIST variable with comma-separated usernames
 // for example: WHITELIST=user1,user2,user3
-const whitelist = process.env.WHITELIST
-  ? process.env.WHITELIST.split(',').map(u => u.trim().toLowerCase())
-  : [];
-console.log("Whitelist:", whitelist);
+const whitelist = process.env.WHITELIST ? process.env.WHITELIST.split(',').map(u => u.trim().toLowerCase()) : [];
 
 async function fetchJD(user, state) {
     const response = await fetch(`https://www.6b6t.org/pl/stats/${user}`);
