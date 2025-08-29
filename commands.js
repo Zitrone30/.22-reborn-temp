@@ -709,6 +709,7 @@ const admin_commands = {
         let target = args[0];
         if (target && target.trim().length > 0) {
             bot.chat(state.safeChat(`/ignore ${target}`));
+            bot.chat(state.safeChat(`Ignored ${target}`));
         } else {
             bot.chat(state.safeChat(`Usage: ${prefix}ignore <username>`));
         }
