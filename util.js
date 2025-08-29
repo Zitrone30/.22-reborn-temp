@@ -25,7 +25,6 @@ async function fetchJD(user, state) {
 }
 
 function whitelisted_users(user) {
-  user = user.trim().toLowerCase();
   return whitelist.includes(user.trim().toLowerCase());
 }
 
