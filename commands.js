@@ -830,6 +830,19 @@ const admin_commands = {
         }
     },
 
+    [`${prefix}tpy`]: (user, message, bot, state) => {
+        const args = getArgs(message, prefix, "tpy");
+        let target = args[0];
+        if (!target || target.length < 3) {
+            target = user;
+
+        } else {
+            bot.chat(safeChat(`tpy usage: -tpy <player> or only -tpy for self tp`));
+            return;
+        }
+        bot.chat(`/tpy ${target}`);
+    },
+
     [`${prefix}say`]: (user, message, bot, state) => {
         const message_to_run = message.split(`${prefix}say `)[1];
         if (message_to_run && message_to_run.trim() !== '') {
